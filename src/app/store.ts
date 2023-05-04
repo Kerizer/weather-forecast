@@ -1,9 +1,11 @@
 import { configureStore, type ThunkAction, type Action } from '@reduxjs/toolkit'
 import currentWeather from '../features/currentWeather/currentWeatherSlice'
+import temperatureMode from '../features/temperatureModeChange/temperatureModeSlice'
 
 export const store = configureStore({
   reducer: {
-    currentWeather
+    currentWeather,
+    temperatureMode
   }
 })
 

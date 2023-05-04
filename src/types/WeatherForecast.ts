@@ -25,6 +25,17 @@ interface WeatherBase {
   base: string
 }
 
+interface City {
+  id: number
+  name: string
+  coord: Coordinates
+  country: string
+  population: number
+  timezone: number
+  sunrise: number
+  sunset: number
+}
+
 export interface CurrentWeather extends WeatherBase {
   dt: number
   main: Temperature
@@ -49,7 +60,7 @@ export interface CurrentWeather extends WeatherBase {
   cod: number
 }
 
-export interface WeatherForecast extends WeatherBase {
+interface WeatherForecastList extends WeatherBase {
   dt: number
   main: Temperature
   visibility: number
@@ -65,4 +76,12 @@ export interface WeatherForecast extends WeatherBase {
     pod: string
   }
   dt_txt: string
+}
+
+export interface WeatherForecast {
+  cod: string
+  message: number
+  cnt: number
+  city: City
+  list: WeatherForecastList[]
 }

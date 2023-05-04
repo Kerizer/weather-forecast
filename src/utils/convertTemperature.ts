@@ -1,9 +1,9 @@
-export function convertFromKelvin (temp: number, to: string): number {
+export const convertFromKelvin = (temp: number, to: 'C' | 'F'): number => {
   let result: number
 
-  if (to === 'celsius') {
+  if (to === 'C') {
     result = temp - 273.15
-  } else if (to === 'fahrenheit') {
+  } else if (to === 'F') {
     result = (temp - 273.15) * 9 / 5 + 32
   } else {
     throw new Error('Invalid temperature scale. Please use "celsius" or "fahrenheit"')
