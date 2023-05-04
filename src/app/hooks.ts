@@ -7,19 +7,19 @@ import TemperatureMode from '../types/TEMP_MODES'
 export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>()
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
-export default function useTemp (temperature?: number): string {
+export const useFormattedTemperature = (kelvinTemperature?: number): string => {
   const temperatureMode = useSelector(
     (state: RootState) => state.temperatureMode.mode
   )
 
-  if (temperature === undefined) {
+  if (kelvinTemperature === undefined) {
     return 'N/A'
   }
 
   const convertedTemp =
         temperatureMode === TemperatureMode.Celsius
-          ? convertFromKelvin(temperature, 'C')
-          : convertFromKelvin(temperature, 'F')
+          ? convertFromKelvin(kelvinTemperature, 'C')
+          : convertFromKelvin(kelvinTemperature, 'F')
 
   return `${convertedTemp.toFixed(0)} °${temperatureMode === TemperatureMode.Celsius ? 'C' : 'F'}`
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { type RootState } from '../../app/store'
 import { type CurrentWeather, type WeatherForecast } from '../../types/WeatherForecast'
-import useTemp from '../../app/hooks'
+import { useFormattedTemperature } from '../../app/hooks'
 
 interface ForecastResultsContainerProps {
   city?: string
@@ -12,7 +12,7 @@ export const ForecastResults: React.FC<ForecastResultsContainerProps> = ({ city 
   const weatherForecast = useSelector<RootState, WeatherForecast | undefined>((state) => state.currentWeather.weatherForecast)
   const currentWeather = useSelector<RootState, CurrentWeather | undefined>((state) => state.currentWeather.currentWeather)
 
-  const currentTemperature = useTemp(weatherForecast?.list[0].main.temp)
+  const currentTemperature = useFormattedTemperature(weatherForecast?.list[0].main.temp)
 
   return (
     <div>

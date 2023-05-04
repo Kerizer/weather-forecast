@@ -5,8 +5,9 @@ import temperatureMode from '../features/temperatureModeChange/temperatureModeSl
 export const store = configureStore({
   reducer: {
     currentWeather,
-    temperatureMode
-  }
+    temperatureMode,
+  },
+  devTools: process.env.NODE_ENV !== 'production',
 })
 
 export type AppDispatch = typeof store.dispatch

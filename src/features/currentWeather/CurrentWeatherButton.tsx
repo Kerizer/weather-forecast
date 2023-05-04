@@ -1,14 +1,16 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 
-import { getWeatherForecastForLocation } from './currentWeatherSlice'
+import { getWeatherForecastForLocationByCoordinates, getWeatherForecastForLocationByName } from './currentWeatherSlice'
 import { useAppDispatch } from '../../app/hooks'
 
 export const Search = (): JSX.Element => {
+  const [locationName, setLocationName] = useState('')
+
   const dispatch = useAppDispatch()
 
   const geolocationSuccess = useCallback((position: any) => {
     const { coords: { latitude, longitude } } = position
-    void dispatch(getWeatherForecastForLocation({ lat: latitude, lon: longitude }))
+    void dispatch(getWeatherForecastForLocationByCoordinates({ lat: latitude, lon: longitude }))
   }, [dispatch])
 
   const geolocationError = useCallback(() => {
@@ -24,7 +26,18 @@ export const Search = (): JSX.Element => {
     return null
   }, [geolocationSuccess, geolocationError])
 
-  return <form>
+  const handleChange = (e: React.FormEvent<HTMLInputElement>): void => {
+    setLocationName(e.currentTarget.value)
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault()
+    void dispatch(getWeatherForecastForLocationByName({ name: locationName }))
+  }
+
+  return <form onSubmit={handleSubmit} action="">
+        <input type="text" value={locationName} onChange={handleChange} />
+        <button type="submit">Search</button>
         <button type="button" onClick={gpsButtonClickListener}>use my current position</button>
     </form>
 }
