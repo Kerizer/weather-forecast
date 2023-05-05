@@ -2,9 +2,12 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import config from './../../config'
 import { type CurrentWeather, type WeatherForecast } from '../../types/WeatherForecast'
 
-interface WeatherForecastState {
+interface WeatherForecastData {
   currentWeather?: CurrentWeather
   weatherForecast?: WeatherForecast
+}
+
+interface WeatherForecastState extends WeatherForecastData {
   loading: boolean
   error: string | null
 }
@@ -16,35 +19,28 @@ const initialState: WeatherForecastState = {
   error: null
 }
 
+const fetchForecastData = async (urlParams: string): Promise<WeatherForecastData> => {
+  const apiKey = (config.OWMApiKey.length > 0) ? config.OWMApiKey : ''
+  const forecastUrl = `http://api.openweathermap.org/data/2.5/forecast?${urlParams}&appid=${apiKey}`
+  const currentUrl = `http://api.openweathermap.org/data/2.5/weather?${urlParams}&appid=${apiKey}`
+  const [forecastResponse, currentResponse] = await Promise.all([
+    fetch(forecastUrl).then(async (response) => await response.json()),
+    fetch(currentUrl).then(async (response) => await response.json())
+  ])
+  return { weatherForecast: forecastResponse, currentWeather: currentResponse }
+}
+
 export const getWeatherForecastForLocationByName = createAsyncThunk(
   'weather/getForecastByName',
   async ({ name }: { name: string }) => {
-    const apiKey = (config.OWMApiKey.length > 0) ? config.OWMApiKey : ''
-    const forecastUrl = `http://api.openweathermap.org/data/2.5/forecast?q=${name}&appid=${apiKey}`
-    const currentUrl = `http://api.openweathermap.org/data/2.5/weather?q=${name}&appid=${apiKey}`
-
-    const [forecastResponse, currentResponse] = await Promise.all([
-      fetch(forecastUrl).then(async (response) => await response.json()),
-      fetch(currentUrl).then(async (response) => await response.json())
-    ])
-
-    return { forecastData: forecastResponse, currentData: currentResponse }
+    return await fetchForecastData(`q=${name}`)
   }
 )
 
 export const getWeatherForecastForLocationByCoordinates = createAsyncThunk(
-  'weather/getForecast',
+  'weather/getForecastByCoordinates',
   async ({ lat, lon }: { lat: number, lon: number }) => {
-    const apiKey = (config.OWMApiKey.length > 0) ? config.OWMApiKey : ''
-    const forecastUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`
-    const currentUrl = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`
-
-    const [forecastResponse, currentResponse] = await Promise.all([
-      fetch(forecastUrl).then(async (response) => await response.json()),
-      fetch(currentUrl).then(async (response) => await response.json())
-    ])
-
-    return { forecastData: forecastResponse, currentData: currentResponse }
+    return await fetchForecastData(`lat=${lat}&lon=${lon}`)
   }
 )
 
@@ -59,8 +55,8 @@ const weatherForecastSlice = createSlice({
       })
       .addCase(getWeatherForecastForLocationByCoordinates.fulfilled, (state, action) => {
         state.loading = false
-        state.currentWeather = action.payload.currentData
-        state.weatherForecast = action.payload.forecastData
+        state.currentWeather = action.payload.currentWeather
+        state.weatherForecast = action.payload.weatherForecast
       })
       .addCase(getWeatherForecastForLocationByCoordinates.rejected, (state, action) => {
         state.loading = false
@@ -72,8 +68,8 @@ const weatherForecastSlice = createSlice({
       })
       .addCase(getWeatherForecastForLocationByName.fulfilled, (state, action) => {
         state.loading = false
-        state.currentWeather = action.payload.currentData
-        state.weatherForecast = action.payload.forecastData
+        state.currentWeather = action.payload.currentWeather
+        state.weatherForecast = action.payload.weatherForecast
       })
       .addCase(getWeatherForecastForLocationByName.rejected, (state, action) => {
         state.loading = false
