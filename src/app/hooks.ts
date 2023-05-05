@@ -1,7 +1,9 @@
 import { type TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
+
+import { convertFromKelvin } from 'utils/convertTemperature'
+import TemperatureMode from 'types/tempModes'
+
 import type { RootState, AppDispatch } from './store'
-import { convertFromKelvin } from '../utils/convertTemperature'
-import TemperatureMode from '../types/TEMP_MODES'
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>()

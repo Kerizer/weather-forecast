@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import config from './../../config'
-import { type CurrentWeather, type WeatherForecast } from '../../types/WeatherForecast'
+import { type CurrentWeather, type WeatherForecast } from '../../types/weatherForecast'
 
 interface WeatherForecastData {
   currentWeather?: CurrentWeather

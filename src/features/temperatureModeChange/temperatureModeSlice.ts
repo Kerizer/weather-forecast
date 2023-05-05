@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import TemperatureMode from '../../types/TEMP_MODES'
+
+import TemperatureMode from 'types/tempModes'
 
 interface TemperatureModeState {
   mode: TemperatureMode

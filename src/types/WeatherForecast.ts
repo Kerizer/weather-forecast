@@ -57,7 +57,7 @@ export interface CurrentWeather extends WeatherBase {
   timezone: number
   id: number
   name: string
-  cod: number
+  cod: string
 }
 
 interface WeatherForecastList extends WeatherBase {

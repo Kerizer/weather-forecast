@@ -1,16 +1,18 @@
 import React, { useCallback, useState } from 'react'
 
-import { getWeatherForecastForLocationByCoordinates, getWeatherForecastForLocationByName } from './currentWeatherSlice'
-import { useAppDispatch } from '../../app/hooks'
+import { useAppDispatch } from 'app/hooks'
 
-export const Search = (): JSX.Element => {
+import { getWeatherForecastForLocationByCoordinates, getWeatherForecastForLocationByName } from './currentWeatherSlice'
+import styles from './LocationSelectForm.module.scss'
+
+export const LocationSelectForm = (): JSX.Element => {
   const [locationName, setLocationName] = useState('')
 
   const dispatch = useAppDispatch()
 
   const geolocationSuccess = useCallback((position: any) => {
     const { coords: { latitude, longitude } } = position
-    void dispatch(getWeatherForecastForLocationByCoordinates({ lat: latitude, lon: longitude }))
+    dispatch(getWeatherForecastForLocationByCoordinates({ lat: latitude, lon: longitude }))
   }, [dispatch])
 
   const geolocationError = useCallback(() => {
@@ -32,12 +34,16 @@ export const Search = (): JSX.Element => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
-    void dispatch(getWeatherForecastForLocationByName({ name: locationName }))
+    dispatch(getWeatherForecastForLocationByName({ name: locationName }))
   }
 
-  return <form onSubmit={handleSubmit} action="">
-        <input type="text" value={locationName} onChange={handleChange} />
-        <button type="submit">Search</button>
-        <button type="button" onClick={gpsButtonClickListener}>use my current position</button>
+  return <form onSubmit={handleSubmit} action="" className={styles.locationSelectForm}>
+        <div className={styles.searchForm}>
+          <input type="text" value={locationName} onChange={handleChange} className={styles.cityInput} placeholder='City' />
+          <button type="submit">Search</button>
+        </div>
+        <div>
+          use my <button type="button" onClick={gpsButtonClickListener}>current position</button>
+        </div>
     </form>
 }
