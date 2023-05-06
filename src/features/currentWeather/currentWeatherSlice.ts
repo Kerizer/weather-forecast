@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit'
 import config from './../../config'
 import { type CurrentWeather, type WeatherForecast } from '../../types/weatherForecast'
 
@@ -44,6 +44,10 @@ export const getWeatherForecastForLocationByCoordinates = createAsyncThunk(
   }
 )
 
+export const clearWeatherForecast = createAction(
+  'weather/clearWeatherForecast'
+)
+
 const weatherForecastSlice = createSlice({
   name: 'weatherForecast',
   initialState,
@@ -75,6 +79,10 @@ const weatherForecastSlice = createSlice({
         state.loading = false
         state.error =
           action.error.message ?? 'Unable to fetch weather forecast data'
+      })
+      .addCase(clearWeatherForecast, (state) => {
+        state.currentWeather = undefined
+        state.weatherForecast = undefined
       })
   }
 })
