@@ -3,11 +3,13 @@ import config from './../../config'
 import { type CurrentWeather, type WeatherForecast } from '../../types/weatherForecast'
 
 interface WeatherForecastData {
-  currentWeather?: CurrentWeather
-  weatherForecast?: WeatherForecast
+  currentWeather: CurrentWeather
+  weatherForecast: WeatherForecast
 }
 
-interface WeatherForecastState extends WeatherForecastData {
+interface WeatherForecastState {
+  currentWeather?: CurrentWeather
+  weatherForecast?: WeatherForecast
   loading: boolean
   error: string | null
 }
@@ -19,6 +21,8 @@ const initialState: WeatherForecastState = {
   error: null
 }
 
+export const appCacheKey = 'weatherForecast'
+
 const fetchForecastData = async (urlParams: string): Promise<WeatherForecastData> => {
   const apiKey = (config.OWMApiKey.length > 0) ? config.OWMApiKey : ''
   const forecastUrl = `http://api.openweathermap.org/data/2.5/forecast?${urlParams}&appid=${apiKey}`
@@ -27,7 +31,9 @@ const fetchForecastData = async (urlParams: string): Promise<WeatherForecastData
     fetch(forecastUrl).then(async (response) => await response.json()),
     fetch(currentUrl).then(async (response) => await response.json())
   ])
-  return { weatherForecast: forecastResponse, currentWeather: currentResponse }
+  const forecastResult = { weatherForecast: forecastResponse, currentWeather: currentResponse }
+  window.localStorage.setItem(appCacheKey, JSON.stringify(forecastResult))
+  return forecastResult
 }
 
 export const getWeatherForecastForLocationByName = createAsyncThunk(
@@ -39,8 +45,19 @@ export const getWeatherForecastForLocationByName = createAsyncThunk(
 
 export const getWeatherForecastForLocationByCoordinates = createAsyncThunk(
   'weather/getForecastByCoordinates',
-  async ({ lat, lon }: { lat: number, lon: number }) => {
+  async ({ lat, lon }: { lat: number, lon: number, cache?: WeatherForecastData }) => {
     return await fetchForecastData(`lat=${lat}&lon=${lon}`)
+  }
+)
+
+export const restoreForecastFromCache = createAsyncThunk(
+  'weather/restoreForecast',
+  async ({ cache }: { cache: WeatherForecastData }, { dispatch }) => {
+    const { lat, lon } = cache.currentWeather.coord
+
+    dispatch(getWeatherForecastForLocationByCoordinates({ lat, lon, cache }))
+
+    return cache
   }
 )
 
@@ -54,8 +71,18 @@ const weatherForecastSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getWeatherForecastForLocationByCoordinates.pending, (state) => {
-        state.loading = true
+      .addCase(getWeatherForecastForLocationByCoordinates.pending, (state, { meta }) => {
+        const cache = meta.arg.cache
+
+        // We need to restore the cache if it exists, otherwise show loader indicator
+        if (cache != null) {
+          state.loading = false
+          // We want to show the cached data before new data is fetched
+          state.currentWeather = cache.currentWeather
+          state.weatherForecast = cache.weatherForecast
+        } else {
+          state.loading = true
+        }
       })
       .addCase(getWeatherForecastForLocationByCoordinates.fulfilled, (state, action) => {
         state.loading = false
