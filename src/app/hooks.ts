@@ -23,5 +23,5 @@ export const useFormattedTemperature = (kelvinTemperature?: number): string => {
           ? convertFromKelvin(kelvinTemperature, 'C')
           : convertFromKelvin(kelvinTemperature, 'F')
 
-  return `${convertedTemp.toFixed(0)} °${temperatureMode === TemperatureMode.Celsius ? 'C' : 'F'}`
+  return `${convertedTemp.toFixed(0)}°${temperatureMode === TemperatureMode.Celsius ? 'C' : 'F'}`
 }

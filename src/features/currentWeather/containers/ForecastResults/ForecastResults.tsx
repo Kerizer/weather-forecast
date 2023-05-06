@@ -18,16 +18,30 @@ interface ForecastResultsProps {
   currentTemperature: number
   cityName: string
   iconCode?: string
+  timestamp: number
+  description?: string
   backButtonHandler: () => void
+  detailedTemperature: {
+    min: number
+    max: number
+  }
 }
 
 const ForecastResults: React.FC<ForecastResultsProps> = (props) => {
   const currentTemperature = useFormattedTemperature(props.currentTemperature)
   const currentWeatherConditionIconCode = props.iconCode ?? '01d'
 
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  }
+  const currentDay = new Intl.DateTimeFormat('en-US', options).format(new Date(props.timestamp))
+
   return (
     <div>
-      <div>
+      <div className={styles.controls}>
         <button
           onClick={props.backButtonHandler}
           aria-label="Back to search"
@@ -40,11 +54,19 @@ const ForecastResults: React.FC<ForecastResultsProps> = (props) => {
 
       </div>
 
-      <h2>Weather in </h2>
-        <div>
-          <p>Temperature: {currentTemperature}</p>
-          <WeatherConditionIcon code={currentWeatherConditionIconCode} type="main" />
-        </div>
+      <div>
+        <p>{currentDay}</p>
+        <p>{props.description}</p>
+      </div>
+      <div className={styles.currentWeatherInfoContainer}>
+        <span className={styles.currentTemperature}>{currentTemperature}</span>
+        <span className={styles.currentCondition}><WeatherConditionIcon code={currentWeatherConditionIconCode} /></span>
+        <div className={styles.currentTemperatureDetails}>
+            <p>Lowest: {useFormattedTemperature(props.detailedTemperature.min)}</p>
+            <p>Average: {currentTemperature}</p>
+            <p>Highest: {useFormattedTemperature(props.detailedTemperature.max)}</p>
+          </div>
+      </div>
     </div>
   )
 }
@@ -63,11 +85,19 @@ export const ForecastResultsContainer: React.FC<ForecastResultsContainerProps> =
         Not found
     </div>
   } else {
+    const detailedTemperature = {
+      min: currentWeather.main.temp_min,
+      max: currentWeather.main.temp_max,
+    }
+
     return <ForecastResults
-        backButtonHandler={clearForecast}
-        currentTemperature={currentWeather.main.temp}
-        cityName={currentWeather.name}
-        iconCode={currentWeather.weather[0].icon}
+      timestamp={currentWeather.dt * 1000}
+      backButtonHandler={clearForecast}
+      currentTemperature={currentWeather.main.temp}
+      description={currentWeather.weather[0].description}
+      cityName={currentWeather.name}
+      iconCode={currentWeather.weather[0].icon}
+      detailedTemperature={detailedTemperature}
     />
   }
 }
