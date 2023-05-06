@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 
 import { useAppDispatch } from 'app/hooks'
 
-import { getWeatherForecastForLocationByCoordinates, getWeatherForecastForLocationByName } from './currentWeatherSlice'
+import { getWeatherForecastForLocationByCoordinates, getWeatherForecastForLocationByName } from '../../currentWeatherSlice'
 import styles from './LocationSelectForm.module.scss'
 
 export const LocationSelectForm = (): JSX.Element => {
@@ -39,7 +39,7 @@ export const LocationSelectForm = (): JSX.Element => {
 
   return <form onSubmit={handleSubmit} action="" className={styles.locationSelectForm}>
         <div className={styles.searchForm}>
-          <input type="text" value={locationName} onChange={handleChange} className={styles.cityInput} placeholder='City' />
+          <input type="text" value={locationName} onChange={handleChange} className={styles.cityInput} placeholder='City' aria-label="Enter name of the city" />
           <button type="submit">Search</button>
         </div>
         <div>

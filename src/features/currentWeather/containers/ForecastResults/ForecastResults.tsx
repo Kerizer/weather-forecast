@@ -5,6 +5,9 @@ import { useFormattedTemperature } from 'app/hooks'
 import { type RootState } from 'app/store'
 import { type CurrentWeather, type WeatherForecast } from 'types/weatherForecast'
 import { WeatherConditionIcon } from 'components/WeatherConditionIcon'
+import { TemperatureModeChangeButton } from 'features/temperatureModeChange/TemperatureModeChangeButton'
+
+import styles from './ForecastResults.module.scss'
 
 interface ForecastResultsContainerProps {
   city?: string
@@ -14,6 +17,27 @@ interface ForecastResultsProps {
   currentTemperature: number
   cityName: string
   iconCode?: string
+}
+
+const ForecastResults: React.FC<ForecastResultsProps> = (props) => {
+  const currentTemperature = useFormattedTemperature(props.currentTemperature)
+  const currentWeatherConditionIconCode = props.iconCode ?? '01d'
+
+  return (
+    <div>
+      <div>
+        <button aria-label="Back to search" className={styles.backButton}><span className="material-icons">arrow_back</span>{props.cityName}</button>
+        <TemperatureModeChangeButton></TemperatureModeChangeButton>
+
+      </div>
+
+      <h2>Weather in </h2>
+        <div>
+          <p>Temperature: {currentTemperature}</p>
+          <WeatherConditionIcon code={currentWeatherConditionIconCode} type="main" />
+        </div>
+    </div>
+  )
 }
 
 export const ForecastResultsContainer: React.FC<ForecastResultsContainerProps> = () => {
@@ -31,19 +55,4 @@ export const ForecastResultsContainer: React.FC<ForecastResultsContainerProps> =
         iconCode={currentWeather.weather[0].icon}
     />
   }
-}
-
-export const ForecastResults: React.FC<ForecastResultsProps> = (props) => {
-  const currentTemperature = useFormattedTemperature(props.currentTemperature)
-  const currentWeatherConditionIconCode = props.iconCode ?? '01d'
-
-  return (
-    <div>
-      <h2>Weather in {props.cityName}</h2>
-        <div>
-          <p>Temperature: {currentTemperature}</p>
-          <WeatherConditionIcon code={currentWeatherConditionIconCode} />
-        </div>
-    </div>
-  )
 }
