@@ -110,6 +110,7 @@ const weatherForecastSlice = createSlice({
       .addCase(clearWeatherForecast, (state) => {
         state.currentWeather = undefined
         state.weatherForecast = undefined
+        localStorage.removeItem(appCacheKey)
       })
   }
 })
