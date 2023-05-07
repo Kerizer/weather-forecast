@@ -32,7 +32,14 @@
         }
     }
     .currentCoordinates {
+        text-align: center;
         margin: 12px 0;
+        span {
+            font-size: 12px;
+        }
+        p {
+            margin-top: 12px
+        }
         .currentCoordinatesButton {
             cursor: pointer;
             padding: 0;

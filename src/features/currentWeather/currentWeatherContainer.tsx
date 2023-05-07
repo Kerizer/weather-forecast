@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { ForecastResultsContainer } from 'features/currentWeather/containers/ForecastResults'
+import { ForecastResultsContainer } from 'features/currentWeather/containers/ForecastResultsContainer'
 import { LocationSelectForm } from 'features/currentWeather/containers/LocationSelect/LocationSelectForm'
 import { useAppDispatch, useAppSelector } from 'app/hooks'
 import { LoaderIndicator } from 'components/LoaderIndicator/LoaderIndicator'

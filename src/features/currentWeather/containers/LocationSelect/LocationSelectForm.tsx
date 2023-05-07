@@ -43,7 +43,8 @@ export const LocationSelectForm = (): JSX.Element => {
           <button type="submit" className="material-icons">search</button>
         </div>
         <div className={styles.currentCoordinates}>
-          use my <button type="button" onClick={gpsButtonClickListener} className={styles.currentCoordinatesButton}>current position</button>
+          <span>or</span>
+          <p>use my <button type="button" onClick={gpsButtonClickListener} className={styles.currentCoordinatesButton}>current position</button></p>
         </div>
     </form>
 }
