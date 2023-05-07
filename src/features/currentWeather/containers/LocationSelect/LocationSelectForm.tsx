@@ -40,10 +40,10 @@ export const LocationSelectForm = (): JSX.Element => {
   return <form onSubmit={handleSubmit} action="" className={styles.locationSelectForm}>
         <div className={styles.searchForm}>
           <input type="text" value={locationName} onChange={handleChange} className={styles.cityInput} placeholder='City' aria-label="Enter name of the city" />
-          <button type="submit">Search</button>
+          <button type="submit" className="material-icons">search</button>
         </div>
-        <div>
-          use my <button type="button" onClick={gpsButtonClickListener}>current position</button>
+        <div className={styles.currentCoordinates}>
+          use my <button type="button" onClick={gpsButtonClickListener} className={styles.currentCoordinatesButton}>current position</button>
         </div>
     </form>
 }

@@ -9,8 +9,6 @@
     position: relative;
     padding: 40px;
     display: flex;
-    align-items: center;
-    justify-content: center;
 
     @include medium() {
         min-height: 100%;

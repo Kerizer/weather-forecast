@@ -20,4 +20,18 @@
             appearance: textfield;
         }
     }
+    .currentCoordinates {
+        margin: 12px 0;
+        .currentCoordinatesButton {
+            cursor: pointer;
+            padding: 0;
+            border-bottom: 1px dashed;
+            font-size: 16px;
+        }
+    }
+    button {
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
 }

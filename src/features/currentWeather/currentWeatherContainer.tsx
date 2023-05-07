@@ -24,7 +24,7 @@ export const CurrentWeatherContainer = (): JSX.Element => {
 
   const errorMessages = []
 
-  if (currentWeather?.cod !== 200) {
+  if (currentWeather != null && currentWeather?.cod !== 200) {
     errorMessages.push(currentWeather?.message ?? 'Unknown error occurred')
   }
 
@@ -36,7 +36,7 @@ export const CurrentWeatherContainer = (): JSX.Element => {
     {
       ((currentWeather == null) || (weatherForecast == null) || errorMessages.length !== 0)
         ? <>
-            <ErrorContainer errorMessage={errorMessages} />
+            {errorMessages.length > 0 && <ErrorContainer errorMessage={errorMessages} />}
             <LocationSelectForm />
           </>
         : <ForecastResultsContainer currentWeather={currentWeather} weatherForecast={weatherForecast} />
