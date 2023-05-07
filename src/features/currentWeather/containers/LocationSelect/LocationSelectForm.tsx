@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 
 import { useAppDispatch } from 'app/hooks'
 
-import { getWeatherForecastForLocationByCoordinates, getWeatherForecastForLocationByName } from '../../currentWeatherSlice'
+import { getWeatherForecastForLocationByCoordinates, getWeatherForecastForLocationByName, setError } from '../../currentWeatherSlice'
 import styles from './LocationSelectForm.module.scss'
 
 export const LocationSelectForm = (): JSX.Element => {
@@ -16,6 +16,7 @@ export const LocationSelectForm = (): JSX.Element => {
   }, [dispatch])
 
   const geolocationError = useCallback(() => {
+    dispatch(setError(new Error('Geolocation failed. Please ensure that your browser has permission to access the location')))
     console.error('Geolocation failed')
   }, [])
 

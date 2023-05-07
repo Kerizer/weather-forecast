@@ -63,6 +63,13 @@ export const clearWeatherForecast = createAction(
   'weather/clearWeatherForecast'
 )
 
+export const setError = createAction(
+  'weather/setError',
+  (error: Error) => {
+    return { payload: error.message }
+  }
+)
+
 const weatherForecastSlice = createSlice({
   name: 'weatherForecast',
   initialState,
@@ -71,6 +78,7 @@ const weatherForecastSlice = createSlice({
     builder
       .addCase(getWeatherForecastForLocationByCoordinates.pending, (state, { meta }) => {
         const cache = meta.arg.cache
+        state.error = null
 
         // We need to restore the cache if it exists, otherwise show loader indicator
         if (cache != null) {
@@ -94,6 +102,7 @@ const weatherForecastSlice = createSlice({
       })
       .addCase(getWeatherForecastForLocationByName.pending, (state) => {
         state.loading = true
+        state.error = null
       })
       .addCase(getWeatherForecastForLocationByName.fulfilled, (state, action) => {
         state.loading = false
@@ -109,6 +118,10 @@ const weatherForecastSlice = createSlice({
         state.currentWeather = undefined
         state.weatherForecast = undefined
         localStorage.removeItem(appCacheKey)
+      })
+      .addCase(setError, (state, action) => {
+        console.log(state)
+        state.error = action.payload
       })
   }
 })
