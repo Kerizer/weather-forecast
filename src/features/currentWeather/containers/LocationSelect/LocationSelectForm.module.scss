@@ -1,3 +1,6 @@
+@import './../../../../styles/mixins';
+@import './../../../../styles/variables';
+
 .locationSelectForm {    
     display: flex;
     flex-direction: column;
@@ -18,6 +21,14 @@
             padding-left: 32px;
             outline: none;
             appearance: textfield;
+
+            @include small() {
+                font-size: 16px;
+            }
+        }
+        button {
+            padding: 0;
+            width: 32px;
         }
     }
     .currentCoordinates {
@@ -31,6 +42,7 @@
     }
     button {
         background: none;
+        color: $text-color;
         border: none;
         cursor: pointer;
     }
