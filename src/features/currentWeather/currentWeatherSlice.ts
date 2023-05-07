@@ -55,9 +55,7 @@ export const restoreForecastFromCache = createAsyncThunk(
   async ({ cache }: { cache: WeatherForecastData }, { dispatch }) => {
     const { lat, lon } = cache.currentWeather.coord
 
-    dispatch(getWeatherForecastForLocationByCoordinates({ lat, lon, cache }))
-
-    return cache
+    return await dispatch(getWeatherForecastForLocationByCoordinates({ lat, lon, cache }))
   }
 )
 

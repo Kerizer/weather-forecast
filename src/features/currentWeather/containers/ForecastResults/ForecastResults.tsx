@@ -1,8 +1,6 @@
 import React, { useCallback } from 'react'
-import { useSelector } from 'react-redux'
 
 import { useAppDispatch, useFormattedTemperature } from 'app/hooks'
-import { type RootState } from 'app/store'
 import { type CurrentWeather, type WeatherForecast } from 'types/weatherForecast'
 import { WeatherConditionIcon } from 'components/WeatherConditionIcon'
 import { TemperatureModeChangeButton } from 'features/temperatureModeChange/TemperatureModeChangeButton'
@@ -11,7 +9,8 @@ import styles from './ForecastResults.module.scss'
 import { clearWeatherForecast } from 'features/currentWeather/currentWeatherSlice'
 
 interface ForecastResultsContainerProps {
-  city?: string
+  currentWeather: CurrentWeather
+  weatherForecast: WeatherForecast
 }
 
 interface ForecastResultsProps {
@@ -71,26 +70,21 @@ const ForecastResults: React.FC<ForecastResultsProps> = (props) => {
   )
 }
 
-export const ForecastResultsContainer: React.FC<ForecastResultsContainerProps> = () => {
-  const weatherForecast = useSelector<RootState, WeatherForecast | undefined>((state) => state.currentWeather.weatherForecast)
-  const currentWeather = useSelector<RootState, CurrentWeather | undefined>((state) => state.currentWeather.currentWeather)
-
+export const ForecastResultsContainer: React.FC<ForecastResultsContainerProps> = (props) => {
+  const {
+    currentWeather,
+    // weatherForecast,
+  } = props
   const dispatch = useAppDispatch()
   const clearForecast = useCallback(() => {
     dispatch(clearWeatherForecast())
   }, [])
+  const detailedTemperature = {
+    min: currentWeather.main.temp_min,
+    max: currentWeather.main.temp_max,
+  }
 
-  if (currentWeather?.cod === '404' || (currentWeather == null) || (weatherForecast == null)) {
-    return <div>
-        Not found
-    </div>
-  } else {
-    const detailedTemperature = {
-      min: currentWeather.main.temp_min,
-      max: currentWeather.main.temp_max,
-    }
-
-    return <ForecastResults
+  return <ForecastResults
       timestamp={currentWeather.dt * 1000}
       backButtonHandler={clearForecast}
       currentTemperature={currentWeather.main.temp}
@@ -99,5 +93,4 @@ export const ForecastResultsContainer: React.FC<ForecastResultsContainerProps> =
       iconCode={currentWeather.weather[0].icon}
       detailedTemperature={detailedTemperature}
     />
-  }
 }

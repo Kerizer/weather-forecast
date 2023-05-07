@@ -37,6 +37,7 @@ interface City {
 }
 
 export interface CurrentWeather extends WeatherBase {
+  message?: string
   dt: number
   main: Temperature
   visibility: number
@@ -57,7 +58,7 @@ export interface CurrentWeather extends WeatherBase {
   timezone: number
   id: number
   name: string
-  cod: string
+  cod: number
 }
 
 interface WeatherForecastList extends WeatherBase {

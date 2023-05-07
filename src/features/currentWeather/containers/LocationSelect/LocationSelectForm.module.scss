@@ -4,12 +4,11 @@
     justify-content: center;
     width: 100%;
     align-items: center;
-
+    flex: 1;
     .searchForm {
         border-bottom: 1px solid;
         display: flex;
         width: fit-content;
-    
         .cityInput {
             background: none;
             border: none;

@@ -1,21 +1,28 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap&subset=latin-ext');
 @import 'material-icons/iconfont/material-icons.scss';
 @import './_variables';
+@import './mixins';
 
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(to bottom right,#e36e64,#eb8e6a) fixed;
   color: $text-color;
+  background: linear-gradient(to bottom right,#e36e64,#eb8e6a) fixed;  
+  
+  @include medium() {
+    background: white;
+  }
 }
 
 #root {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: 100vh;  
+  
+
 }
 
 input {

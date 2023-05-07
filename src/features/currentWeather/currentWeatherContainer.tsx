@@ -5,6 +5,7 @@ import { LocationSelectForm } from 'features/currentWeather/containers/LocationS
 import { useAppDispatch, useAppSelector } from 'app/hooks'
 import { LoaderIndicator } from 'components/LoaderIndicator/LoaderIndicator'
 import { appCacheKey, restoreForecastFromCache } from './currentWeatherSlice'
+import { ErrorContainer } from 'components/ErrorContainer'
 
 export const CurrentWeatherContainer = (): JSX.Element => {
   const dispatch = useAppDispatch()
@@ -15,15 +16,30 @@ export const CurrentWeatherContainer = (): JSX.Element => {
     }
   }, [dispatch])
 
-  const { loading, currentWeather, weatherForecast } = useAppSelector((state) => state.currentWeather)
+  const { loading, error, currentWeather, weatherForecast } = useAppSelector((state) => state.currentWeather)
 
   if (loading) {
     return <LoaderIndicator />
   }
 
-  if ((currentWeather == null) || (weatherForecast == null)) {
-    return <LocationSelectForm />
+  const errorMessages = []
+
+  if (currentWeather?.cod !== 200) {
+    errorMessages.push(currentWeather?.message ?? 'Unknown error occurred')
   }
 
-  return <ForecastResultsContainer />
+  if (error != null) {
+    errorMessages.push(error)
+  }
+
+  return <>
+    {
+      ((currentWeather == null) || (weatherForecast == null) || errorMessages.length !== 0)
+        ? <>
+            <ErrorContainer errorMessage={errorMessages} />
+            <LocationSelectForm />
+          </>
+        : <ForecastResultsContainer currentWeather={currentWeather} weatherForecast={weatherForecast} />
+    }
+  </>
 }
