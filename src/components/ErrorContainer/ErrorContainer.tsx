@@ -11,7 +11,7 @@ export const ErrorContainer = ({ errorMessage }: ErrorContainerProps): JSX.Eleme
     return <div className={styles.errorContainer}>{errorMessage}</div>
   }
 
-  if (Array.isArray(errorMessage)) {
+  if (Array.isArray(errorMessage) && errorMessage.length !== 0) {
     return (
       <ul className={styles.errorContainer}>
         {errorMessage.map((entry, index) => (

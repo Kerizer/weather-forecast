@@ -1,46 +1,86 @@
 @import './../../../../styles/variables';
+@import './../../../../styles/mixins';
 
-.controls {
-    display: inline-flex;
+
+.forecastResults {
     justify-content: space-between;
-    align-items: center;
-    width: 100%;
+    align-items: stretch;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
 
-    .backButton {
-        border: none;
-        background: none;
-        height: 40px;
-        cursor: pointer;
-        font-size: 24px;
-        display: flex;
+    .controls {
+        display: inline-flex;
+        justify-content: space-between;
         align-items: center;
-        justify-content: center;
-        color: $text-color;
-        span {
-            margin: 0 8px;
+        width: 100%;
+        margin-bottom: 16px;
+    
+        .backButton {
+            border: none;
+            background: none;
+            height: 40px;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: $text-color;
+            span {
+                margin: 0 8px;
+            }
         }
     }
-}
 
-.currentWeatherInfoContainer {
-    color: $primary-color;
-    display: flex;
-
-    .currentTemperature {
-        font-size: 120px;
-        flex: 1;
+    .currentDay {
+        font-size: 40px;
+        @include small() {
+            font-size: 20px;
+        }
     }
     .currentCondition {
-        font-size: 120px;
-        flex: 1;
+        font-size: 32px;
+        @include small() {
+            font-size: 16px;
+        }
     }
-    .currentTemperatureDetails {
-        font-size: 24px;
-        flex: 2;
+    
+    .currentWeatherInfoContainer {
+        color: $primary-color;
+        display: flex;    
+        align-items: center;
+        flex: 1;
+        @include small() {
+            flex-direction: column;
+            align-items: center;
+        }
+    
+        .currentTemperature {
+            font-size: 120px;
+            flex: 1;
+        }
+        .currentCondition {
+            font-size: 120px;
+            flex: 1;
+        }
+        .currentTemperatureDetails {
+            font-size: 24px;
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            p:not(:first-child) {
+                margin-top: 24px;
+            }
+        }
+    }
+    
+    .dayBlockContainer{
         display: flex;
-        flex-direction: column;
-        p:not(:first-child) {
-            margin-top: 24px;
+        flex: 1;
+        align-items: center;
+        @include small() {
+            flex-direction: column;
+            align-items: stretch;
         }
     }
 }

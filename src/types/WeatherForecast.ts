@@ -61,7 +61,7 @@ export interface CurrentWeather extends WeatherBase {
   cod: number
 }
 
-interface WeatherForecastList extends WeatherBase {
+export interface WeatherForecastList extends WeatherBase {
   dt: number
   main: Temperature
   visibility: number
